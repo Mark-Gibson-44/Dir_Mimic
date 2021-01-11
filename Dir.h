@@ -31,13 +31,13 @@ public:
 	Directory(std::string  n);//Constructs a directory
 	Directory();
 	void add_file(File& f);
-	void rm_file(File& f);
+	void rm_file(std::string d);
 	int printSize();
 	void add_dir(std::string n);
 	//void copy();
 	bool inDir(std::string& n);
-	void move();//Refering to moving one directory into another directory
-	void rm_dir();
+	void move(Directory m, Directory location);//Refering to moving one directory into another directory
+	void rm_dir(std::string del);
 	void list_dirs();
 	void list_files();
 	int get_size();

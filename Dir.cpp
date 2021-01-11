@@ -15,9 +15,9 @@ void Directory::add_file(File& f)
 	this->files[f.getFname()] = f;
 }
 
-void Directory::rm_file(File& f)
+void Directory::rm_file(std::string d)
 {
-	files.erase(f.getFname());
+	files.erase(d);
 }
 
 int Directory::printSize()
@@ -45,10 +45,28 @@ bool Directory::inDir(std::string& n)
 	
 }
 
+void Directory::move(Directory m, Directory location)
+{
+	
+}
+
+
+void Directory::rm_dir(std::string del)
+{
+	nested.erase(del);
+}
 
 void Directory::list_dirs()
 {
 	for (auto it = nested.cbegin(); it != nested.cend(); ++it)
+	{
+		std::cout << it->first << "\n";
+	}
+}
+
+void Directory::list_files()
+{
+	for (auto it = files.cbegin(); it != files.cend(); ++it)
 	{
 		std::cout << it->first << "\n";
 	}

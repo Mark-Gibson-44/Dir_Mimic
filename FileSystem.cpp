@@ -1,8 +1,8 @@
 #include "FileSystem.h"
 
-
-
-
+/*
+Function to demonstrate basic uses of the filesystem
+*/
 void FileSystem::Browse()
 {
 	bool cont = true;
@@ -29,12 +29,17 @@ void FileSystem::Browse()
 	}
 }
 
+/*
+Prints out all directories present in a the current Directory
+Then prompts user to select which to move to
+Checks if the Dir exists
+Then moves into the Dir
+*/
 void FileSystem::changeDir()
 {
 	this->cur->list_dirs();
 	std::cout << "Which directory to move to?" << std::endl;
 	std::string moving;
-	//std::getline(std::cin, moving);
 	std::cin >> moving;
 	if (!this->cur->inDir(moving))
 	{
@@ -45,12 +50,19 @@ void FileSystem::changeDir()
 
 }
 
+/*
+Function used to Return to the root of The Dir from anywhere
+
+*/
 void FileSystem::retToHead()
 {
-	//this->cur = this->head;
+	
 	this->cur = this->head;
 }
 
+/*
+Adds A directory into where the current Directory is located
+*/
 void FileSystem::insertDir()
 {
 	std::cout << "Name of Directory to Add" << std::endl;
@@ -59,3 +71,91 @@ void FileSystem::insertDir()
 	std::cin >> moving;
 	this->cur->add_dir(moving);
 }
+
+   
+void FileSystem::changeAbsoluteDir(std::string path)
+{
+	auto traversal = [](std::string& p) {
+		std::vector<std::string> retu;
+		auto start = p.begin();
+
+		auto lastChar = p.begin();
+		for (start; start != p.end(); start++)
+		{
+			if (*start == '/ ')
+			{
+
+				retu.push_back(std::string(lastChar, start));
+				lastChar = start;
+				lastChar++;
+			}
+
+		}
+
+		retu.push_back(std::string(lastChar, start));
+		return retu;
+	};
+	auto depth = traversal(path);
+	for (auto a : depth)
+	{
+		this->cur = std::make_unique<Directory>(this->cur->getDir(a));
+	}
+}
+
+DirOp FileSystem::ParseCommand(std::string cmd)
+{
+	
+	if (!strcmp(cmd.c_str(), "cd"))
+		return CD;
+	
+	if (!strcmp(cmd.c_str(), "ls"))
+		return LS;
+	if (!strcmp(cmd.c_str(), "RM"))
+		return RM;
+	if (!strcmp(cmd.c_str(), "MV"))
+		return MV;
+	return INVALID;
+}
+
+void FileSystem::REPL()
+{
+	while (true)
+	{
+		std::string cmd;
+		std::getline(std::cin, cmd);
+		std::vector<std::string> args = parseInput(cmd);
+		switch (ParseCommand(args[0]))
+		{
+		case CD:
+			std::cout << "Change Dir" << std::endl; break;
+		
+		}
+	}
+}
+
+/*
+Separates a CLI arg by spaces for example cd C:/documents
+would return {"cd", "C:/documents"}
+*/
+std::vector<std::string> FileSystem::parseInput(std::string in)
+{
+	std::vector<std::string> retu;
+	auto start = in.begin();
+
+	auto lastChar = in.begin();
+	for (start; start != in.end(); start++)
+	{
+		if (*start == ' ')
+		{
+
+			retu.push_back(std::string(lastChar, start));
+			lastChar = start;
+			lastChar++;
+		}
+
+	}
+
+	retu.push_back(std::string(lastChar, start));
+	return retu;
+}
+ 

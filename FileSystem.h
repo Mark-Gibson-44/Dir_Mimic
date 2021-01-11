@@ -1,15 +1,18 @@
 #pragma once
 #include <memory>
+#include <vector>
 #include "Dir.h"
 
-enum DirOp
+enum DirOp//ENUM used to Define commands
 {
-	CD,
-	LS,
-	RM,
-	CP,
-	MV,
-	NEW
+	CD = 1,
+	LS = 2,
+	RM = 3,
+	CP = 4,
+	MV = 5,
+	NEW = 6,
+	INVALID = -1
+
 };
 
 class FileSystem
@@ -23,8 +26,11 @@ public:
 	void changeDir();
 	void retToHead();
 	void insertDir();
-
-
+	void changeAbsoluteDir(std::string path);
+	//TODO implement parse Dir to allow for absolute Paths
+	DirOp ParseCommand(std::string cmd);
+	void REPL();
+	std::vector<std::string> parseInput(std::string in);
 
 
 };

@@ -1,15 +1,21 @@
 #include "FileSystem.h"
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <iterator>
+#include <vector>
 
-void REPL()
-{
-	
-}
+
+
+
 
 int main()
 {
+
 	FileSystem f;
-	f.Browse();
+	//f.Browse();
+	f.REPL();
+
+	
 	return 0;
 }
