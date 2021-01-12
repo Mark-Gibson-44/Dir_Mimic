@@ -11,13 +11,14 @@ enum DirOp//ENUM used to Define commands
 	CP = 4,
 	MV = 5,
 	NEW = 6,
-	INVALID = -1
+	INVALID = -1,
+	CDR = 7// For testing of absolute paths
 
 };
 
 class FileSystem
 {
-	Directory root;//Initial Directory
+	const Directory root;//Initial Directory
 	const std::shared_ptr<Directory> head = std::make_unique<Directory>(root);//Pointer to Head
 	std::shared_ptr<Directory> cur;//Pointer to current directory
 public:
@@ -31,6 +32,7 @@ public:
 	DirOp ParseCommand(std::string cmd);
 	void REPL();
 	std::vector<std::string> parseInput(std::string in);
+	void changeDirWithArg(std::string arg);
 
 
 };

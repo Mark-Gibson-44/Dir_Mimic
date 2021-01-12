@@ -50,6 +50,8 @@ void FileSystem::changeDir()
 
 }
 
+
+
 /*
 Function used to Return to the root of The Dir from anywhere
 
@@ -82,7 +84,7 @@ void FileSystem::changeAbsoluteDir(std::string path)
 		auto lastChar = p.begin();
 		for (start; start != p.end(); start++)
 		{
-			if (*start == '/ ')
+			if (*start == '/')
 			{
 
 				retu.push_back(std::string(lastChar, start));
@@ -99,6 +101,7 @@ void FileSystem::changeAbsoluteDir(std::string path)
 	for (auto a : depth)
 	{
 		this->cur = std::make_unique<Directory>(this->cur->getDir(a));
+		//std::cout << a << std::endl;
 	}
 }
 
@@ -110,10 +113,14 @@ DirOp FileSystem::ParseCommand(std::string cmd)
 	
 	if (!strcmp(cmd.c_str(), "ls"))
 		return LS;
-	if (!strcmp(cmd.c_str(), "RM"))
+	if (!strcmp(cmd.c_str(), "rm"))
 		return RM;
-	if (!strcmp(cmd.c_str(), "MV"))
+	if (!strcmp(cmd.c_str(), "mv"))
 		return MV;
+	if (!strcmp(cmd.c_str(), "new"))
+		return NEW;
+	if (!strcmp(cmd.c_str(), "cdr"))
+		return CDR;
 	return INVALID;
 }
 
@@ -121,14 +128,33 @@ void FileSystem::REPL()
 {
 	while (true)
 	{
+		std::cout << "In Directory " << this->cur->getDirName() << "." << std::endl;
 		std::string cmd;
 		std::getline(std::cin, cmd);
 		std::vector<std::string> args = parseInput(cmd);
+		
+		
+		
 		switch (ParseCommand(args[0]))
 		{
 		case CD:
-			std::cout << "Change Dir" << std::endl; break;
-		
+			if (args.size() == 1)
+			{
+				this->retToHead(); break;
+			}
+			this->changeDir(); break;
+			//this->changeDirWithArg(args[1]); break;
+			 
+		case LS:
+			this->cur->list_dirs(); break;
+		case NEW:
+			this->insertDir(); break;
+		case CDR:
+			if (args.size() == 1)
+			{
+				this->retToHead(); break;
+			}
+			this->changeAbsoluteDir(args[1]); break;
 		}
 	}
 }
@@ -157,5 +183,16 @@ std::vector<std::string> FileSystem::parseInput(std::string in)
 
 	retu.push_back(std::string(lastChar, start));
 	return retu;
+}
+
+void FileSystem::changeDirWithArg(std::string arg)
+{
+	
+	if (!this->cur->inDir(arg))
+	{
+		std::cout << "Not a Dir" << std::endl;
+		return;
+	}
+	this->cur = std::make_unique<Directory>(this->cur->getDir(arg));
 }
  
