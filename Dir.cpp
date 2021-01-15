@@ -10,9 +10,10 @@ Directory::Directory(std::string  n)
 	this->name = n;
 }
 
-void Directory::add_file(File& f)
+void Directory::add_file(std::string f)
 {
-	this->files[f.getFname()] = f;
+	File temp(f);
+	this->files[f] = temp;
 }
 
 void Directory::rm_file(std::string d)
@@ -85,7 +86,8 @@ Directory Directory::getDir(std::string s)
 File::File()
 {
 	this->fname = "untitled.txt";
-
+	
+	this->ext = "txt";
 	//this->ext = Read on from '.' in a given string
 }
 
@@ -93,6 +95,8 @@ File::File()
 File::File(std::string  a)
 {
 	this->fname = a;
+	int ind = fname.find('.');
+	this->ext = a.substr(++ind, fname.size());
 	//this->ext = Read on from '.' in a given string
 }
 

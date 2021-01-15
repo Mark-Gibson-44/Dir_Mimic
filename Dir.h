@@ -8,12 +8,12 @@
 class File
 {
 	std::string  fname;
-	const char* ext;
+	std::string ext;
 	size_t bytes;
 public:
 	File(std::string  a);
 	File();
-	void write();
+	
 	std::string  getFname() { return fname; }
 
 
@@ -30,7 +30,7 @@ class Directory
 public:
 	Directory(std::string  n);//Constructs a directory
 	Directory();
-	void add_file(File& f);
+	void add_file(std::string f);
 	void rm_file(std::string d);
 	int printSize();
 	void add_dir(std::string n);

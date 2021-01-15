@@ -46,7 +46,7 @@ void FileSystem::changeDir()
 		std::cout << "Not a Dir" << std::endl;
 		return;
 	}
-	this->cur = std::make_unique<Directory> (this->cur->getDir(moving));
+	this->cur = /*std::move(*/this->getDirLocation(moving);//);
 
 }
 
@@ -101,7 +101,7 @@ void FileSystem::changeAbsoluteDir(std::string path)
 	for (auto a : depth)
 	{
 		this->cur = std::make_unique<Directory>(this->cur->getDir(a));
-		//std::cout << a << std::endl;
+		
 	}
 }
 
@@ -121,6 +121,10 @@ DirOp FileSystem::ParseCommand(std::string cmd)
 		return NEW;
 	if (!strcmp(cmd.c_str(), "cdr"))
 		return CDR;
+	if (!strcmp(cmd.c_str(), "la"))
+		return LA;
+	if (!strcmp(cmd.c_str(), "nf"))
+		return NF;
 	return INVALID;
 }
 
@@ -155,7 +159,12 @@ void FileSystem::REPL()
 				this->retToHead(); break;
 			}
 			this->changeAbsoluteDir(args[1]); break;
+		case LA:
+			this->cur->list_files(); break;
+		case NF:
+			this->insertFile(); break;
 		}
+		
 	}
 }
 
@@ -193,6 +202,20 @@ void FileSystem::changeDirWithArg(std::string arg)
 		std::cout << "Not a Dir" << std::endl;
 		return;
 	}
-	this->cur = std::make_unique<Directory>(this->cur->getDir(arg));
+	this->cur = std::move(this->getDirLocation(arg));
+}
+
+std::shared_ptr<Directory> FileSystem::getDirLocation(std::string arg)
+{
+	return std::make_unique<Directory>(this->cur->getDir(arg));
+}
+
+void FileSystem::insertFile()
+{
+	std::cout << "Name of File to Add" << std::endl;
+	std::string moving;
+
+	std::cin >> moving;
+	this->cur->add_file(moving);
 }
  

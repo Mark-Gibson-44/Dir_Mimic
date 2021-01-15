@@ -12,17 +12,19 @@ enum DirOp//ENUM used to Define commands
 	MV = 5,
 	NEW = 6,
 	INVALID = -1,
-	CDR = 7// For testing of absolute paths
+	CDR = 7,// For testing of absolute paths
+	LA = 8,
+	NF = 9
 
 };
 
 class FileSystem
 {
-	const Directory root;//Initial Directory
+	Directory root;//Initial Directory
 	const std::shared_ptr<Directory> head = std::make_unique<Directory>(root);//Pointer to Head
-	std::shared_ptr<Directory> cur;//Pointer to current directory
+	std::shared_ptr<Directory> cur;//Pointer to current directory]
 public:
-	FileSystem() : root("Root"), cur(std::make_shared<Directory>(root)){}
+	FileSystem() : root("Root"), cur(head/*std::make_shared<Directory>(root)*/){}
 	void Browse();
 	void changeDir();
 	void retToHead();
@@ -33,6 +35,7 @@ public:
 	void REPL();
 	std::vector<std::string> parseInput(std::string in);
 	void changeDirWithArg(std::string arg);
-
+	std::shared_ptr<Directory> getDirLocation(std::string arg);
+	void insertFile();
 
 };
