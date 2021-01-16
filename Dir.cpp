@@ -46,9 +46,10 @@ bool Directory::inDir(std::string& n)
 	
 }
 
-void Directory::move(Directory m, Directory location)
+void Directory::move(std::string dir, Directory* location)
 {
-	
+	location->nested[dir] = this->getDir(dir);
+	this->deleteDir(dir);
 }
 
 
@@ -85,7 +86,9 @@ Directory* Directory::getDir(std::string s)
 
 void Directory::deleteDir(std::string s)
 {
+	
 	delete(this->nested[s]);
+	this->nested.erase(s);
 }
 
 File::File()

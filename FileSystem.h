@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <cassert>
 #include "Dir.h"
 
 enum DirOp//ENUM used to Define commands
@@ -14,7 +15,8 @@ enum DirOp//ENUM used to Define commands
 	INVALID = -1,
 	CDR = 7,// For testing of absolute paths
 	LA = 8,
-	NF = 9
+	NF = 9,
+	DEL = 10
 
 };
 
@@ -36,6 +38,9 @@ public:
 	std::vector<std::string> parseInput(std::string in);
 	void changeDirWithArg(std::string arg);
 	Directory* getDirLocation(std::string arg);
+	Directory* getAbsoluteLocation(std::string arg);
+	void moveDir();
+	void deleteDir();
 	void insertFile();
 
 };

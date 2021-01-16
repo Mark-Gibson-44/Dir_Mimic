@@ -36,7 +36,7 @@ public:
 	void add_dir(std::string n);
 	//void copy();
 	bool inDir(std::string& n);
-	void move(Directory m, Directory location);//Refering to moving one directory into another directory
+	void move(std::string dir, Directory* location);//Refering to moving one directory into another directory
 	void rm_dir(std::string del);
 	void list_dirs();
 	void list_files();
