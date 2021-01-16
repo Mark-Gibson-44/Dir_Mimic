@@ -100,7 +100,7 @@ void FileSystem::changeAbsoluteDir(std::string path)
 	auto depth = traversal(path);
 	for (auto a : depth)
 	{
-		this->cur = std::make_unique<Directory>(this->cur->getDir(a));
+		this->cur = this->cur->getDir(a);
 		
 	}
 }
@@ -202,12 +202,12 @@ void FileSystem::changeDirWithArg(std::string arg)
 		std::cout << "Not a Dir" << std::endl;
 		return;
 	}
-	this->cur = std::move(this->getDirLocation(arg));
+	this->cur = this->getDirLocation(arg);
 }
 
-std::shared_ptr<Directory> FileSystem::getDirLocation(std::string arg)
+Directory* FileSystem::getDirLocation(std::string arg)
 {
-	return std::make_unique<Directory>(this->cur->getDir(arg));
+	return this->cur->getDir(arg);
 }
 
 void FileSystem::insertFile()

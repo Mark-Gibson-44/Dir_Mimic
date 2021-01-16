@@ -35,7 +35,7 @@ void Directory::add_dir(std::string  n)
 
 
 	}
-	Directory ne(n);
+	Directory* ne = new Directory(n);
 	this->nested[n] = ne;
 }
 
@@ -78,9 +78,14 @@ std::string Directory::getDirName()
 	return this->name;
 }
 
-Directory Directory::getDir(std::string s)
+Directory* Directory::getDir(std::string s)
 {
 	return this->nested[s];
+}
+
+void Directory::deleteDir(std::string s)
+{
+	delete(this->nested[s]);
 }
 
 File::File()

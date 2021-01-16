@@ -21,8 +21,8 @@ enum DirOp//ENUM used to Define commands
 class FileSystem
 {
 	Directory root;//Initial Directory
-	const std::shared_ptr<Directory> head = std::make_unique<Directory>(root);//Pointer to Head
-	std::shared_ptr<Directory> cur;//Pointer to current directory]
+	Directory* head = &root;//Pointer to Head
+	Directory* cur;//Pointer to current directory]
 public:
 	FileSystem() : root("Root"), cur(head/*std::make_shared<Directory>(root)*/){}
 	void Browse();
@@ -35,7 +35,7 @@ public:
 	void REPL();
 	std::vector<std::string> parseInput(std::string in);
 	void changeDirWithArg(std::string arg);
-	std::shared_ptr<Directory> getDirLocation(std::string arg);
+	Directory* getDirLocation(std::string arg);
 	void insertFile();
 
 };
