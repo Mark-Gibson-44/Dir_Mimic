@@ -23,7 +23,7 @@ public:
 class Directory
 {
 	
-	std::map<std::string ,Directory> nested;// Used for any directories present within a given directory
+	std::map<std::string ,Directory*> nested;// Used for any directories present within a given directory
 	std::map<std::string ,File> files;//Used for all files that are in a given directory
 	std::string  name;//Dir Name
 	
@@ -36,14 +36,14 @@ public:
 	void add_dir(std::string n);
 	//void copy();
 	bool inDir(std::string& n);
-	void move(Directory m, Directory location);//Refering to moving one directory into another directory
+	void move(std::string dir, Directory* location);//Refering to moving one directory into another directory
 	void rm_dir(std::string del);
 	void list_dirs();
 	void list_files();
 	int get_size();
 	std::string getDirName();
-	Directory getDir(std::string s);
-	
+	Directory* getDir(std::string s);
+	void deleteDir(std::string s);
 
 };
 

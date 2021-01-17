@@ -100,7 +100,7 @@ void FileSystem::changeAbsoluteDir(std::string path)
 	auto depth = traversal(path);
 	for (auto a : depth)
 	{
-		this->cur = std::make_unique<Directory>(this->cur->getDir(a));
+		this->cur = this->cur->getDir(a);
 		
 	}
 }
@@ -125,6 +125,10 @@ DirOp FileSystem::ParseCommand(std::string cmd)
 		return LA;
 	if (!strcmp(cmd.c_str(), "nf"))
 		return NF;
+	if (!strcmp(cmd.c_str(), "del"))
+		return DEL;
+	if (!strcmp(cmd.c_str(), "mv"))
+		return MV;
 	return INVALID;
 }
 
@@ -146,8 +150,8 @@ void FileSystem::REPL()
 			{
 				this->retToHead(); break;
 			}
-			this->changeDir(); break;
-			//this->changeDirWithArg(args[1]); break;
+			
+			this->changeDirWithArg(args[1]); break;
 			 
 		case LS:
 			this->cur->list_dirs(); break;
@@ -163,6 +167,10 @@ void FileSystem::REPL()
 			this->cur->list_files(); break;
 		case NF:
 			this->insertFile(); break;
+		case DEL:
+			this->deleteDir(); break;
+		case MV:
+			this->moveDir(); break;
 		}
 		
 	}
@@ -202,12 +210,67 @@ void FileSystem::changeDirWithArg(std::string arg)
 		std::cout << "Not a Dir" << std::endl;
 		return;
 	}
-	this->cur = std::move(this->getDirLocation(arg));
+	this->cur = this->getDirLocation(arg);
 }
 
-std::shared_ptr<Directory> FileSystem::getDirLocation(std::string arg)
+Directory* FileSystem::getDirLocation(std::string arg)
 {
-	return std::make_unique<Directory>(this->cur->getDir(arg));
+	return this->cur->getDir(arg);
+}
+
+Directory* FileSystem::getAbsoluteLocation(std::string arg)
+{
+	auto traversal = [](std::string& p) {
+		std::vector<std::string> retu;
+		auto start = p.begin();
+
+		auto lastChar = p.begin();
+		for (start; start != p.end(); start++)
+		{
+			if (*start == '/')
+			{
+
+				retu.push_back(std::string(lastChar, start));
+				lastChar = start;
+				lastChar++;
+			}
+
+		}
+
+		retu.push_back(std::string(lastChar, start));
+		return retu;
+	};
+	Directory* temp = this->cur;
+	auto depth = traversal(arg);
+	for (auto a : depth)
+	{
+		temp = temp->getDir(a);
+
+	}
+	return temp;
+}
+
+void FileSystem::moveDir()
+{
+	std::cout << "Where to move" << std::endl;
+	std::string moving;
+
+	std::cin >> moving;
+	std::string Dir;
+	std::cout << "Which Dir to move" << std::endl;
+	std::cin >> Dir;
+	assert(this->getAbsoluteLocation(moving) != nullptr);
+	this->cur->move(Dir,this->getAbsoluteLocation(moving));
+}
+
+void FileSystem::deleteDir()
+{
+	this->cur->list_dirs();
+	std::cout << "Which Dir to delete?" << std::endl;
+	std::string deleting;
+
+	std::cin >> deleting;
+	this->cur->deleteDir(deleting);
 }
 
 void FileSystem::insertFile()
@@ -218,4 +281,6 @@ void FileSystem::insertFile()
 	std::cin >> moving;
 	this->cur->add_file(moving);
 }
+
+
  

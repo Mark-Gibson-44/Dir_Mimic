@@ -13,8 +13,8 @@ int main()
 {
 
 	FileSystem f;
-	f.Browse();
-	//f.REPL();
+	//f.Browse();
+	f.REPL();
 
 	
 	return 0;
